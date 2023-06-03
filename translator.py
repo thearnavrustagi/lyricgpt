@@ -36,7 +36,8 @@ class Translator:
 
     it requires the data to adapt the tokenizer in np.array data format
     """
-    def __init__(self,data,vocabulary_size=VOCAB_SIZE, standardize = standardize, ragged = True):
+    def __init__(self,data,vocabulary_size=VOCAB_SIZE, 
+                 standardize = standardize, ragged = True):
         if type(data) == type(dict()):
             self.tokenizer = tf.keras.layers.TextVectorization.from_config(data['config'])
             self.tokenizer.adapt(tf.data.Dataset.from_tensor_slices(["a"]))
@@ -88,7 +89,6 @@ class Translator:
 
 
 if __name__ == "__main__":
-    print(standardize("[CHORUS] Look what you made me do\n (Look WHat you made me do) [VERSE 2] Bye"))
     lyrics = load_lyrics("./dataset/lyrics.medium.csv")
     print("LOADING DONE")
 

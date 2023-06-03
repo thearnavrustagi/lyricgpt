@@ -34,7 +34,8 @@ class PositionalEmbedding (tf.keras.layers.Layer):
         super().__init__()
         self.d_model = d_model
         self.embedding = tf.keras.layers.Embedding(vocab_size, d_model, mask_zero = True)
-        self.pos_encoding = PositionalEmbedding.positional_encoding(length=LYRIC_LENGTH, depth=d_model)
+        self.pos_embedding = tf.keras.layers.Embedding(LYRIC_LENGTH, d_model)
+        self.add = tf.keras.layers.Add()
 
     def compute_mask (self, *args, **kwargs):
         return self.embedding.compute_mask (*args, **kwargs)
@@ -42,9 +43,7 @@ class PositionalEmbedding (tf.keras.layers.Layer):
     def call (self, x):
         length = tf.shape(x)[1]
         x = self.embedding(x)
-
-        x *= tf.math.sqrt(tf.cast(self.d_model,tf.float32))
-        x += self.pos_encoding[tf.newaxis, :length, :]
+        x = self.add([x,self.pos_embedding(tf.convert_to_tensor(tf.range(length)))])
 
         return x
 
