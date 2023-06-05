@@ -9,7 +9,7 @@ import string
 import pickle
 
 # local imports
-from constants import VOCAB_SIZE, TRANSLATOR_FNAME
+from constants import VOCAB_SIZE, TRANSLATOR_FNAME, LYRIC_DS, CHUNKSIZE
 from constants import TYPE, END_TYPE, BACKGROUND, END_BACKGROUND
 from constants import NEWLINE, START, END
 from dataset import load_lyrics
@@ -53,7 +53,6 @@ class Translator:
             self.ragged = ragged
             self.tokenizer = self.__initialize_tokenizer(data)
 
-        print(self.tokenizer.get_vocabulary())
         self.word2index = self.__initialize_w2i()
         self.index2word = self.__initialize_i2w()
 
@@ -96,11 +95,18 @@ class Translator:
             return Translator(data)
 
 
-if __name__ == "__main__":
-    lyrics = load_lyrics("./dataset/lyrics.medium.csv")
-    print("LOADING DONE")
+def chunk_generator (fname):
+    for i,x in  enumerate(pd.read_csv(fname, chunksize=1)):
+        features = x
+        lyrics = features.pop("lyrics").to_numpy()
+        lyrics = np.array([l.encode("utf-8") if type(l) == type("") else " " for l in lyrics])
 
-    translator = Translator(lyrics)
+        print("chunk :", i, len(lyrics))
+        yield lyrics
+
+if __name__ == "__main__":
+    print("LOADING DONE")
+    translator = Translator(chunk_generator(LYRIC_DS))
     print(f"vocab : {translator.tokenizer.get_vocabulary()[:10]}")
     t = translator.tokenizer(
         ["[chorus] Look What you made Me do (Look What you MaDe me do)"]

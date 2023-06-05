@@ -9,7 +9,7 @@ from dataset import load_simple_ds
 from constants import LYRIC_LENGTH
 
 
-def convert(dataset, translator):
+def process_chunk(dataset, translator):
     converted = []
     for row in dataset:
         context = tf.convert_to_tensor(
@@ -43,7 +43,7 @@ def get_processed_ds(s):
     dataset = load_simple_ds(s)
     translator = Translator.load()
     print("starting conversion")
-    data = convert(dataset, translator)
+    data = process_chunk(dataset, translator)
 
     return data, translator
 
