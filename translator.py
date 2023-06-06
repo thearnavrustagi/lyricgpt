@@ -22,13 +22,14 @@ def standardize(arg):
 
     arg = tf.strings.regex_replace(arg, "\(", BACKGROUND)
     arg = tf.strings.regex_replace(arg, "\)", END_BACKGROUND)
+    arg = START + arg + END
 
     arg = tf.strings.regex_replace(arg, "\n", NEWLINE)
 
-    arg = tf.strings.regex_replace(arg, f"[{re.escape(string.punctuation)}]", " ")
+    arg = tf.strings.regex_replace(arg, f"[^a-zA-Z]", " ")
+    arg = tf.strings.regex_replace(arg, "\s+", " ")
 
-    return START + arg + END
-
+    return arg
 
 class Translator:
     """

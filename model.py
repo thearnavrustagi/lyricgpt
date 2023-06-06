@@ -34,6 +34,7 @@ class Transformer(tf.keras.Model):
 
     def train_step(self, data):
         x, y = data
+        print(x,y)
         with tf.GradientTape() as tape:
             y_pred = self(data, training=True)  # Forward pass
             # Compute the loss value

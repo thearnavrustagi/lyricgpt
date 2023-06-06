@@ -11,7 +11,8 @@ from constants import LYRIC_LENGTH
 
 def process_chunk(dataset, translator):
     converted = []
-    for row in dataset:
+    for _,row in dataset.iterrows():
+        print(row)
         context = tf.convert_to_tensor(
             translator.tokenizer(row[0]).numpy(), dtype=tf.float32
         )
@@ -37,7 +38,6 @@ def process_chunk(dataset, translator):
     ctx = tf.stack(ctx)
     x = tf.stack(x)
     return tf.data.Dataset.from_tensor_slices((ctx, x))
-
 
 def get_processed_ds(s):
     dataset = load_simple_ds(s)

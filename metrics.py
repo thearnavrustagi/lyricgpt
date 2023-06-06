@@ -29,6 +29,9 @@ class TransformerSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
                 'd_model' : d_model,
                 'warmup_steps' : self.warmup_steps
                 }
+    @classmethod
+    def from_config (cls, dictionary):
+        return cls(dictionary["d_model"], dictionary["warmup_steps"])
 
 
 learning_rate = TransformerSchedule(DEPTH)
