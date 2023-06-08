@@ -8,6 +8,7 @@ from translator import standardize
 from process_ds import process_chunk
 from translator import Translator, standardize
 from constants import LYRIC_DS, CHUNKSIZE, BATCH_SIZE
+from metrics import optimizer, masked_loss, masked_accuracy
 
 def simple_gen(translator, transformer, query , temperature=0.5):
   initial = translator.word2index([['[START]']]) # (batch, sequence)
@@ -55,10 +56,15 @@ if __name__ == "__main__":
     transformer = create_transformer()
     translator = Translator.load()
     transformer.compile(
+            loss = masked_loss,
+            optimizer = optimizer,
+            metrics = [ masked_accuracy ]
+            )
+    """
         loss=  tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
         optimizer=tf.keras.optimizers.Adam(beta_1=0.9,beta_2=0.98,epsilon=1e-9), 
         metrics=[ tf.keras.metrics.sparse_categorical_accuracy]
-    )
+    )"""
 
     start_training(transformer,translator)
 

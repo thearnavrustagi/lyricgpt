@@ -11,6 +11,8 @@ from translator import Translator, standardize
 from constants import LYRIC_DS, CHUNKSIZE, BATCH_SIZE, LYRIC_LENGTH
 from constants import START
 
+from metrics import masked_accuracy, masked_loss, TransformerSchedule
+
 def simple_gen(translator, transformer, query , temperature=0.5):
   print(translator.tokenizer.get_vocabulary()[:10])
   initial = translator.word2index([["START"]]) # (batch, sequence)
@@ -50,7 +52,7 @@ def simple_gen(translator, transformer, query , temperature=0.5):
 
 if __name__ == "__main__":
     translator = Translator.load()
-    transformer = tf.keras.models.load_model("./model/transformer")
+    transformer = tf.keras.models.load_model("./model/transformer", custom_objects={'masked_loss':masked_loss, 'masked_accuracy':masked_accuracy, "TransformerSchedule" : TransformerSchedule})
     transformer.summary()
 
     while 1:

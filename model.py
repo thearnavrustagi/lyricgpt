@@ -13,7 +13,7 @@ class Transformer(tf.keras.Model):
         super().__init__()
 
         self.encoder = Encoder(
-            num_layers=num_layers,
+            num_layers=num_layers//2,
             d_model=d_model,
             num_heads=num_heads,
             dff=dff,
@@ -22,7 +22,7 @@ class Transformer(tf.keras.Model):
         )
 
         self.decoder = Decoder(
-            num_layers=num_layers,
+            num_layers=int(num_layers*1.5),
             d_model=d_model,
             num_heads=num_heads,
             dff=dff,
