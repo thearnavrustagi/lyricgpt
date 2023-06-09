@@ -16,7 +16,7 @@ def process_chunk(dataset, translator):
         context = tf.convert_to_tensor(
             translator.tokenizer(row[0]).numpy(), dtype=tf.float32
         )
-        x = tf.convert_to_tensor(translator.tokenizer(row[1]).numpy(), dtype=tf.float32)
+        x = tf.convert_to_tensor(translator.tokenizer(row[6]).numpy(), dtype=tf.float32)
         converted.append((context, x))
 
     max_length = LYRIC_LENGTH

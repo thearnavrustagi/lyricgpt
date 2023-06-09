@@ -40,7 +40,7 @@ def simple_gen(translator, transformer, query , temperature=0.5):
     else:
         next = tf.random.categorical(preds/temperature, num_samples=1)  # (batch, 1)
     arr = np.append(arr,next)
-    print(arr)
+    print(" ".join([bytes.decode(a) for a in translator.index2word([arr,])[0].numpy().tolist()]))
     initial = np.array([arr,])
     initial = pad_sequences(initial, maxlen=LYRIC_LENGTH, padding='post', truncating='post')
 
